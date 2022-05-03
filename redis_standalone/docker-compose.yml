@@ -1,0 +1,22 @@
+version: '3.7'
+
+networks:
+  redis-cluster-net:
+    external:
+      name: redis-cluster-net
+
+services:
+  # redis_standalone配置
+  redis_standalone:
+    image: daocloud.io/library/redis:6.0.4
+    container_name: redis_standalone
+    restart: always
+    volumes:
+      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    networks:
+      redis-cluster-net:
+        ipv4_address: 192.168.200.91
+    ports:
+      - 6379:6379
+      - 16379:16379

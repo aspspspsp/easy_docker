@@ -1,0 +1,22 @@
+version: '3.1'
+services:
+  rabbitmq:
+    image: rabbitmq:management-alpine
+    container_name: rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=twg
+      - RABBITMQ_DEFAULT_PASS=123456
+    restart: always
+    hostname: rabbit_host
+    privileged: true #給資料卷賦許可權 避免啟動出現Permission denied
+    volumes:
+      - ./mqdata:/var/lib/rabbitmq #掛載 RabbitMQ資料
+      - ./log:/var/log/rabbitmq #掛載 RabbitMQ日誌
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"

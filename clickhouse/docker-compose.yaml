@@ -20,6 +20,7 @@ services:
      volumes:
       - './.clickhouse-data/db:/var/lib/clickhouse/'
       - './config/users.xml:/etc/clickhouse-server/users.xml'
+      - './config/config.xml:/etc/clickhouse-server/config.xml'
      networks:
        redis-cluster-net:
         ipv4_address: 192.168.200.203

@@ -1,0 +1,16 @@
+version: '3.1'
+services:
+    nginx:
+       image: nginx:latest
+       volumes:
+        - ./../../data0/nginx.conf:/etc/nginx/nginx.conf:ro
+       networks:
+        - redis-cluster-net
+       ports:
+        - "4000:4000"
+       expose:
+        - '4000'                     
+networks:
+    redis-cluster-net:
+        external:
+            name: redis-cluster-net

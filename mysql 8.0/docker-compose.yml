@@ -1,0 +1,27 @@
+version: '3.3'
+
+networks:
+    redis-cluster-net:
+        external:
+            name: redis-cluster-net
+
+services:
+  database:
+    image: mysql:8.0.29-oracle
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'db'   
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'oh_my_ody!'      
+      MYSQL_ROOT_PASSWORD: 'oh_my_ody!'
+      SET_CONTAINER_TIMEZONE: 'true'
+      CONTAINER_TIMEZONE: 'Asia/Shanghai'
+    ports:
+      - '13306:3306'
+    volumes:
+      - './.mysql-data/db:/var/lib/mysql'
+      - './conf/my.cnf:/etc/my.cnf'
+    networks:
+      redis-cluster-net:
+          ipv4_address: 192.168.200.201

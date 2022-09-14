@@ -1,0 +1,41 @@
+<yandex>
+    <zookeeper_servers>
+        <node index="1">
+            <host>zk1</host>
+            <port>2181</port>
+        </node>
+    </zookeeper_servers>
+    
+    <clickhouse_remote_servers>
+        <default>
+            <shard> <!--default集群的第一个分片-->
+                <internal_replication>true</internal_replication>
+                <replica> <!--该分片的第一个副本-->
+                    <host>ck1</host>
+                    <port>9000</port>
+                </replica>
+                <replica> <!--该分片的第二个副本-->
+                    <host>ck2</host>
+                    <port>9000</port>
+                </replica>
+            </shard>
+        </default>
+        <default_replica>
+            <shard> <!--default_replica集群的第一个分片-->
+                <internal_replication>true</internal_replication>
+                <replica> <!--该分片的第一个副本-->
+                    <host>ck3</host>
+                    <port>9000</port>
+                </replica>
+                <replica> <!--该分片的第二个副本-->
+                    <host>ck4</host>
+                    <port>9000</port>
+                </replica>
+            </shard>
+        </default_replica>
+    </clickhouse_remote_servers> 
+
+    <networks>
+        <ip>::/0</ip>
+    </networks>
+</yandex>

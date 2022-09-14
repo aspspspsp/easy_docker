@@ -1,0 +1,7 @@
+<yandex>
+    <macros>
+        <shard>01</shard>
+        <replica>rep_1_2</replica>
+        <layer>default_replica</layer>
+    </macros>
+</yandex>

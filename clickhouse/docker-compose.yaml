@@ -11,6 +11,7 @@ services:
       - 2181:2181
     volumes:
       - ./zkdata:/data
+      - ./zkDatalog:/datalog
     networks:
       redis-cluster-net:
         ipv4_address: 192.168.200.250

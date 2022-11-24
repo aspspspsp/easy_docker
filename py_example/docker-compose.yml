@@ -1,0 +1,21 @@
+version: '3.7'
+
+networks:
+  redis-cluster-net:
+    external:
+      name: redis-cluster-net
+
+services:
+  # redis1配置
+  py_example:
+    image: python:latest
+    container_name: py_example
+    restart: always
+    volumes:
+      - ./py:/home/opt
+    command: /bin/bash -c "pip install -r /home/opt/requirements.txt && python /home/opt/main.py"
+    networks:
+      redis-cluster-net:
+        ipv4_address: 192.168.200.19
+    ports:
+      - 5000:5000

@@ -19,10 +19,6 @@ x-airflow-common:
     AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
     AIRFLOW__API__AUTH_BACKENDS: 'airflow.api.auth.backend.session'
     _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:-}
-  volumes:
-    - ./dags:/opt/airflow/dags
-    - ./logs:/opt/airflow/logs
-    - ./plugins:/opt/airflow/plugins
   user: "${AIRFLOW_UID:-50000}:0"
   depends_on:
     &airflow-common-depends-on
@@ -34,6 +30,7 @@ networks:
     redis-cluster-net:
         external:
             name: redis-cluster-net
+
 services:
   postgres:
     image: postgres:13
@@ -73,6 +70,10 @@ services:
     command: webserver
     ports:
       - 8080:8080
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./logs:/opt/airflow/logs
+      - ./plugins:/opt/airflow/plugins
     healthcheck:
       test: ["CMD", "curl", "--fail", "http://localhost:8080/health"]
       interval: 10s
@@ -97,8 +98,9 @@ services:
       retries: 5
     restart: always
     volumes:
-      - ./logs/scheduler:/opt/airflow/logs/scheduler
       - ./dags:/opt/airflow/dags
+      - ./logs:/opt/airflow/logs
+      - ./plugins:/opt/airflow/plugins
     networks:
       redis-cluster-net:
         ipv4_address: 192.168.200.104
@@ -117,6 +119,10 @@ services:
       interval: 10s
       timeout: 10s
       retries: 5
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./logs:/opt/airflow/logs
+      - ./plugins:/opt/airflow/plugins
     environment:
       <<: *airflow-common-env
       # Required to handle warm shutdown of the celery workers properly
@@ -143,11 +149,15 @@ services:
     networks:
       redis-cluster-net:
         ipv4_address: 192.168.200.106
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./logs:/opt/airflow/logs
+      - ./plugins:/opt/airflow/plugins
     depends_on:
       <<: *airflow-common-depends-on
       airflow-init:
         condition: service_completed_successfully
-
+  
   airflow-init:
     <<: *airflow-common
     entrypoint: /bin/bash
@@ -241,6 +251,10 @@ services:
       - bash
       - -c
       - airflow
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./logs:/opt/airflow/logs
+      - ./plugins:/opt/airflow/plugins
     networks:
       redis-cluster-net:
         ipv4_address: 192.168.200.108
@@ -261,6 +275,10 @@ services:
       timeout: 10s
       retries: 5
     restart: always
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./logs:/opt/airflow/logs
+      - ./plugins:/opt/airflow/plugins
     networks:
       redis-cluster-net:
         ipv4_address: 192.168.200.109

@@ -8,7 +8,7 @@ networks:
 services:
   # redis_standalone配置
   redis_standalone:
-    image: daocloud.io/library/redis:6.0.4
+    image: redis:7.0.9-bullseye
     container_name: redis_standalone
     restart: always
     volumes:

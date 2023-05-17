@@ -6,6 +6,16 @@ networks:
       name: redis-cluster-net
 
 services:
+  redis-cluster:
+    image: daocloud.io/library/redis:6.0.4
+    command: redis-cli -a 123456 --cluster create  192.168.200.11:6383 192.168.200.12:6384 192.168.200.13:6385 --cluster-replicas 0  --cluster-yes
+    depends_on:
+      - redis1
+      - redis2
+      - redis3
+    networks: 
+      redis-cluster-net: 
+        ipv4_address: 192.168.200.254
   # redis1配置
   redis1:
     image: daocloud.io/library/redis:6.0.4

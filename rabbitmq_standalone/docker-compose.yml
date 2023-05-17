@@ -7,7 +7,7 @@ services:
       - RABBITMQ_DEFAULT_USER=twg
       - RABBITMQ_DEFAULT_PASS=123456
     restart: always
-    hostname: rabbit_host
+    command: ["bash", "-c", "chmod 400 /var/lib/rabbitmq/.erlang.cookie; rabbitmq-server"]
     privileged: true #給資料卷賦許可權 避免啟動出現Permission denied
     volumes:
       - ./mqdata:/var/lib/rabbitmq #掛載 RabbitMQ資料
@@ -20,3 +20,10 @@ services:
       options:
         max-size: "200k"
         max-file: "10"
+    networks:
+      redis-cluster-net:
+        ipv4_address: 192.168.200.19
+networks:
+    redis-cluster-net:
+        external:
+            name: redis-cluster-net

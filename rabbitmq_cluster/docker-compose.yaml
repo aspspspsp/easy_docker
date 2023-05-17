@@ -1,0 +1,65 @@
+version: "3.9"
+
+networks:
+    redis-cluster-net:
+        external:
+            name: redis-cluster-net
+
+services:
+  rabbit1:
+    image: rabbitmq:3-management
+    hostname: rabbit1
+    environment:
+      - RABBITMQ_ERLANG_COOKIE=SWQOKODSQALRPCLNMEQG
+      - RABBITMQ_DEFAULT_USER=user
+      - RABBITMQ_DEFAULT_PASS=1234
+    volumes:
+      - ./data/rabbitmq1:/var/lib/rabbitmq # 數據存放位址
+      - ./var/log/rabbitmq1:/var/log/rabbitmq # log存放地址
+      - ./rabbitmq-cluster/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+      - ./rabbitmq-cluster/enabled_plugins:/etc/rabbitmq/enabled_plugins
+    ports:
+      - "4369:4369"
+      - "5671:5671"
+      - "5672:5672"
+      - "15671:15671"
+      - "15672:15672"
+      - "25672:25672"
+    networks:
+      redis-cluster-net:
+        ipv4_address: 192.168.200.101
+  rabbit2:
+    image: rabbitmq:3-management
+    hostname: rabbit2
+    environment:
+        - RABBITMQ_ERLANG_COOKIE=SWQOKODSQALRPCLNMEQG
+        - RABBITMQ_DEFAULT_USER=user
+        - RABBITMQ_DEFAULT_PASS=1234
+    volumes:
+      - ./data/rabbitmq2:/var/lib/rabbitmq # 數據存放位址
+      - ./var/log/rabbitmq2:/var/log/rabbitmq # log存放地址
+      - ./rabbitmq-cluster/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+      - ./rabbitmq-cluster/enabled_plugins:/etc/rabbitmq/enabled_plugins
+    depends_on:
+      - rabbit1
+    networks:
+      redis-cluster-net:
+        ipv4_address: 192.168.200.102
+  rabbit3:
+    image: rabbitmq:3-management
+    hostname: rabbit3
+    environment:
+      - RABBITMQ_ERLANG_COOKIE=SWQOKODSQALRPCLNMEQG
+      - RABBITMQ_DEFAULT_USER=user
+      - RABBITMQ_DEFAULT_PASS=1234
+    volumes:
+      - ./data/rabbitmq3:/var/lib/rabbitmq # 數據存放位址
+      - ./var/log/rabbitmq3:/var/log/rabbitmq # log存放地址
+      - ./rabbitmq-cluster/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+      - ./rabbitmq-cluster/enabled_plugins:/etc/rabbitmq/enabled_plugins
+    depends_on:
+      - rabbit1
+      - rabbit2
+    networks:
+      redis-cluster-net:
+        ipv4_address: 192.168.200.103
